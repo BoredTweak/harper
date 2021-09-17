@@ -25,7 +25,8 @@ def writeOutput(results: dict):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--token", help="GitHub Personal Access Token")
+    parser.add_argument("--token", required=True, help="GitHub Personal Access Token")
+    parser.add_argument("--since", help="(Optional) Filter results to only items since date in format yyyy-MM-dd")
     args = parser.parse_args()
     if not args.token:
         print('Please retry with a GitHub PAT token specified with the `--token TOKEN` argument')
@@ -35,8 +36,9 @@ def main():
     results = []
     config = Configuration()
     for repository in config.data:
-        result = service.generateNotification(repository)
-        results.append(result)
+        result = service.generateNotification(repository, sinceDate=args.since)
+        if(result is not None):
+            results.append(result)
     writeOutput(results)
 
 if __name__ == "__main__":

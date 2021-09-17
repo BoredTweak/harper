@@ -15,6 +15,10 @@ Tool to fetch the latest releases in technologies.
 - Run the application by running `py harper.py --token YOUR_GITHUB_PAT_HERE`
 - The results are currently stored in an `output.json` file.
 
+### Help
+
+- To see available arguments run `python harper.py --help` from a terminal instance in this directory.
+
 ## Example Output
 
 If leveraging a `config.txt` such as:
