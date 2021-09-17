@@ -1,31 +1,22 @@
-import requests
+from services import GitHubService
 import json
 import argparse
 
-def fetchTargets():
-    with open('config.txt', 'r') as file:
-        content = file.read()
-        return list(filter(None, content.split('\n')))
+from configuration import Configuration
 
-def latestRelease(repo: str, token: str):
-    r = requests.get(f'https://api.github.com/repos/{repo}/releases', headers={'Authorization': token})
-    results = r.json()
-    parsed = next((x for x in results if x['prerelease'] is False), None)
-    output = {}
-    if(parsed is None):
-        return output
-    output['releaseUrl'] = parsed['html_url']
-    output['releaseNotes'] = parsed['body']
-    output['version'] = parsed['tag_name']
-    return output
+""" Module that monkey-patches json module when it's imported so
+JSONEncoder.default() automatically checks for a special "to_json()"
+method and uses it to encode the object if found.
 
-def repoInfo(repo: str, token: str):
-    r = requests.get(f'https://api.github.com/repos/{repo}', headers={'Authorization': token})
-    results = r.json()
-    if('html_url' not in results):
-        print(results) # Debug - were we rate limited?
-        return {}
-    return results['html_url']
+Credit: https://stackoverflow.com/questions/18478287/making-object-json-serializable-with-regular-encoder/18561055#18561055
+"""
+from json import JSONEncoder
+
+def _default(self, obj):
+    return getattr(obj.__class__, "to_json", _default.default)(obj)
+
+_default.default = JSONEncoder.default  # Save unmodified default.
+JSONEncoder.default = _default # Replace it.
 
 def writeOutput(results: dict):
     json_object = json.dumps(results, indent = 4) 
@@ -39,12 +30,12 @@ def main():
     if not args.token:
         print('Please retry with a GitHub PAT token specified with the `--token TOKEN` argument')
         return
+    
+    service = GitHubService(args.token)
     results = []
-    for repository in fetchTargets():
-        result = {}
-        result['name'] = repository
-        result['repoInfo'] = repoInfo(repository, args.token)
-        result['releaseInfo'] = latestRelease(repository, args.token)
+    config = Configuration()
+    for repository in config.data:
+        result = service.generateNotification(repository)
         results.append(result)
     writeOutput(results)
 
