@@ -13,9 +13,17 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    
+    - name: Setup Configuration 
+      run: |
         mv configuration/config.example.txt configuration/config.txt
-        python harper.py --token ${{ secrets.GITHUB_TOKEN }} --output console
+
+    - name: Run Application
+      run: |
+        echo "::set-output name=harper_run::$(python harper.py --token ${{ secrets.GITHUB_TOKEN }} --output console)"
+      id: harper_run
