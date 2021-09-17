@@ -18,6 +18,7 @@ class GitHubService:
         output.releaseUrl = parsed['html_url']
         output.releaseNotes = parsed['body']
         output.version = parsed['tag_name']
+        output.publishDate = parsed['published_at']
         return output
 
     def generateNotification(self, repo: str) -> Notification:

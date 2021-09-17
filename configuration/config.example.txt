@@ -15,3 +15,4 @@ expressjs/express
 hashicorp/consul
 nodejs/node
 rust-lang/rust
+angular/angular
