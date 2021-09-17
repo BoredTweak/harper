@@ -1,0 +1,17 @@
+vercel/next.js
+facebook/react
+vuejs/vue
+dotnet/core
+pulumi/pulumi
+PowerShell/PowerShell
+python/cpython
+JetBrains/kotlin
+microsoft/terminal
+scala/scala
+postgres/postgres
+hashicorp/terraform
+golang/go
+expressjs/express
+hashicorp/consul
+nodejs/node
+rust-lang/rust
