@@ -6,6 +6,11 @@ Tool to fetch the latest releases in technologies.
 
 - [Python][technology-main]
 
+## Running the Service
+
+- From the root directory run `py app.py`
+- To test, run `curl -X GET "http://localhost:5000/tech?repo=vercel/next.js" -H 'token: YOUR_GITHUB_PAT_HERE'`
+
 ## Running Locally
 
 - Create a [GitHub Personal Access Token][gh-token]. 
